@@ -11,7 +11,7 @@ interface SideBarProps {
 function SideBar({ tab }: SideBarProps) {
   return (
     <div className="flex flex-col w-[21%] h-full bg-sidebar overflow-y-auto">
-      <div className="m-2">
+      <div className="m-2 h-full">
         {tab === 0 && <Doc />}
         {tab === 1 && <Luminosity />}
         {tab === 2 && <TextureSelector />}

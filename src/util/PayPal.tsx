@@ -17,10 +17,7 @@ const DonateButton = ({ currency, amount }: DonateButtonProps) => {
   useEffect(() => {
     amountRef.current = amount;
   }, [amount]);
-  async function handleApprove(
-    data: OnApproveData,
-    actions: OnApproveActions,
-  ) {
+  async function handleApprove(data: OnApproveData, actions: OnApproveActions) {
     const capture = await actions.order!.capture();
     const givenName = capture.payer?.name?.given_name;
     if (givenName) {
@@ -69,7 +66,7 @@ function DonateForm() {
   return (
     <form className="flex flex-col gap-4 mt-4">
       <AmountPicker
-        initialAmount={initialAmount}
+        // initialAmount={initialAmount}
         onAmountChange={(e) => {
           setAmount((e.target as unknown as HTMLInputElement).value);
         }}
@@ -81,30 +78,37 @@ function DonateForm() {
 
 interface AmountPickerProps {
   onAmountChange: (e: ChangeEvent<HTMLFieldSetElement>) => void;
-  initialAmount: string;
+  // initialAmount: string;
 }
 
-function AmountPicker({ onAmountChange, initialAmount }: AmountPickerProps) {
+const amounts = [1.00, 2.50, 5.00];
+function AmountPicker({ onAmountChange }: AmountPickerProps) {
   return (
     <fieldset onChange={onAmountChange}>
-      <legend>Donation Amount</legend>
-      <label>
-        <input
-          type="radio"
-          value={initialAmount}
-          defaultChecked
-          name="amount"
-        />
-        1.00
-      </label>
-      <label>
-        <input type="radio" value="4.00" name="amount" id="radio-6" />
-        4.00
-      </label>
-      <label>
-        <input type="radio" value="8.00" name="amount" id="radio-9" />
-        8.00
-      </label>
+      <legend>Donation Amount:</legend>
+      <div className="flex items-center justify-around">
+        {amounts.map(amount => <label key={amount}>
+          <input type="radio" value={amount} name="amount"/>
+          {amount}€
+        </label>)}
+        {/* <label>
+          <input
+            type="radio"
+            value={initialAmount}
+            defaultChecked
+            name="amount"
+          />
+          1.00
+        </label>
+        <label>
+          <input type="radio" value="4.00" name="amount" id="radio-6" />
+          4.00
+        </label>
+        <label>
+          <input type="radio" value="8.00" name="amount" id="radio-9" />
+          8.00
+        </label> */}
+      </div>
     </fieldset>
   );
 }
