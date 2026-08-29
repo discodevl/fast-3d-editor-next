@@ -1,31 +1,20 @@
-"use client";
-
-import { useState } from "react";
 import { Provider } from "jotai";
 import MainSideBar from "./MainSideBar";
 import ModelViewer from "./ModelViewer";
 import SideBar from "./SideBar";
 
-function App() {
-  const [tab, setTab] = useState(0);
-
-  function tabHandler(tab: number) {
-    setTab(tab);
-  }
-
-  return (
-    <div className="flex w-screen h-screen">
-      <MainSideBar onChangeTab={tabHandler} tab={tab} />
-      <SideBar tab={tab} />
-      <ModelViewer />
-    </div>
-  );
+interface AppShellProps {
+  tab: number;
 }
 
-export default function AppShell() {
+export default function AppShell({ tab }: AppShellProps) {
   return (
     <Provider>
-      <App />
+      <div className="flex w-screen h-screen">
+        <MainSideBar tab={tab} />
+        <SideBar tab={tab} />
+        <ModelViewer />
+      </div>
     </Provider>
   );
 }

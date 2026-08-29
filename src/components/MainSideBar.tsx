@@ -1,10 +1,10 @@
 "use client";
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Lightbulb, Layers, Image as ImageIcon, Download, CircleHelp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface MainSideBarProps {
-  onChangeTab: (tab: number) => void;
   tab: number;
   block?: boolean;
 }
@@ -16,12 +16,23 @@ const items: { tab: number; icon: LucideIcon }[] = [
   { tab: 4, icon: Download },
 ];
 
-function MainSideBar({ onChangeTab, tab, block }: MainSideBarProps) {
+function MainSideBar({ tab, block }: MainSideBarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   function toggleSideBar(value: number) {
     if (block) {
       return;
     }
-    onChangeTab(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === 0) {
+      params.delete("tab");
+    } else {
+      params.set("tab", String(value));
+    }
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname);
   }
 
   return (

@@ -1,11 +1,13 @@
-"use client";
+import AppShell from "@/components/AppShell";
 
-import dynamic from "next/dynamic";
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
+  const parsedTab = Number(tab);
+  const activeTab = Number.isInteger(parsedTab) && parsedTab >= 0 ? parsedTab : 0;
 
-const AppShell = dynamic(() => import("@/components/AppShell"), {
-  ssr: false,
-});
-
-export default function Home() {
-  return <AppShell />;
+  return <AppShell tab={activeTab} />;
 }
