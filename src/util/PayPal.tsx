@@ -64,7 +64,7 @@ const DonateButton = ({ currency, amount }: DonateButtonProps) => {
 };
 
 function DonateForm() {
-  const initialAmount = "0.10";
+  const initialAmount = "1.00";
   const [amount, setAmount] = useState(initialAmount);
   return (
     <form className="flex flex-col gap-4 mt-4">
@@ -95,7 +95,7 @@ function AmountPicker({ onAmountChange, initialAmount }: AmountPickerProps) {
           defaultChecked
           name="amount"
         />
-        0.10
+        1.00
       </label>
       <label>
         <input type="radio" value="4.00" name="amount" id="radio-6" />
