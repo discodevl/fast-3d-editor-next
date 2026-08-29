@@ -91,23 +91,6 @@ function AmountPicker({ onAmountChange }: AmountPickerProps) {
           <input type="radio" value={amount} name="amount"/>
           {amount}€
         </label>)}
-        {/* <label>
-          <input
-            type="radio"
-            value={initialAmount}
-            defaultChecked
-            name="amount"
-          />
-          1.00
-        </label>
-        <label>
-          <input type="radio" value="4.00" name="amount" id="radio-6" />
-          4.00
-        </label>
-        <label>
-          <input type="radio" value="8.00" name="amount" id="radio-9" />
-          8.00
-        </label> */}
       </div>
     </fieldset>
   );

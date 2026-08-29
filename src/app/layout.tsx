@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={ibmPlexMono.variable} suppressHydrationWarning>
       <body className="font-[family-name:var(--font-ibm-plex-mono)] text-white m-0">
         {children}
+        <Analytics />
         <Script
           type="module"
           src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
