@@ -76,6 +76,7 @@ function ModelViewer() {
         exposure={exposure}
         shadow-intensity={shadowIntensity}
         shadow-softness={shadowSoftness}
+        suppressHydrationWarning
       ></model-viewer>
     </div>
   );
