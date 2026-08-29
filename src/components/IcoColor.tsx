@@ -1,4 +1,9 @@
-function IcoColor({ size = 20, className }) {
+interface IcoColorProps {
+  size?: number;
+  className?: string;
+}
+
+function IcoColor({ size = 20, className }: IcoColorProps) {
   return (
     <svg
       width={size}

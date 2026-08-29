@@ -2,10 +2,11 @@
 
 import { useSetAtom } from "jotai";
 import { srcAtom } from "../store/model";
+import type { ModelViewerElement } from "../types/model-viewer";
 
 function Export() {
   const setSrc = useSetAtom(srcAtom);
-  let modelViewer = document.querySelector("model-viewer");
+  let modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
 
   async function saveHandler() {
     const glTF = await modelViewer.exportScene();
@@ -19,7 +20,7 @@ function Export() {
 
   function discardHandler() {
     //to fix
-    const mv = document.querySelector("model-viewer");
+    const mv = document.querySelector<ModelViewerElement>("model-viewer")!;
     mv.src = "";
     setSrc("");
   }

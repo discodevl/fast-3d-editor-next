@@ -1,21 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import type { OnApproveData, OnApproveActions } from "@paypal/paypal-js";
 
-const DonateButton = ({ currency, amount }) => {
+interface DonateButtonProps {
+  currency: string;
+  amount: string;
+}
+
+const DonateButton = ({ currency, amount }: DonateButtonProps) => {
   const [successMsg, setSuccessMsg] = useState("");
   const amountRef = useRef(amount);
 
   useEffect(() => {
     amountRef.current = amount;
   }, [amount]);
-  async function handleApprove(data, actions) {
-    const capture = await actions.order.capture();
-    if (capture.payer.name.given_name) {
-      setSuccessMsg(
-        `Thanks ${capture.payer.name.given_name}! Your donation has been made`
-      );
+  async function handleApprove(
+    data: OnApproveData,
+    actions: OnApproveActions,
+  ) {
+    const capture = await actions.order!.capture();
+    const givenName = capture.payer?.name?.given_name;
+    if (givenName) {
+      setSuccessMsg(`Thanks ${givenName}! Your donation has been made`);
     }
   }
 
@@ -45,7 +54,7 @@ const DonateButton = ({ currency, amount }) => {
             });
           }}
           onApprove={handleApprove}
-          onError={(err) => {
+          onError={(err: Record<string, unknown>) => {
             console.error("PayPal Checkout Error", err);
           }}
         />
@@ -62,7 +71,7 @@ function DonateForm() {
       <AmountPicker
         initialAmount={initialAmount}
         onAmountChange={(e) => {
-          setAmount(e.target.value);
+          setAmount((e.target as unknown as HTMLInputElement).value);
         }}
       />
       <DonateButton currency="EUR" amount={amount} />
@@ -70,7 +79,12 @@ function DonateForm() {
   );
 }
 
-function AmountPicker({ onAmountChange, initialAmount }) {
+interface AmountPickerProps {
+  onAmountChange: (e: ChangeEvent<HTMLFieldSetElement>) => void;
+  initialAmount: string;
+}
+
+function AmountPicker({ onAmountChange, initialAmount }: AmountPickerProps) {
   return (
     <fieldset onChange={onAmountChange}>
       <legend>Donation Amount</legend>
@@ -78,7 +92,7 @@ function AmountPicker({ onAmountChange, initialAmount }) {
         <input
           type="radio"
           value={initialAmount}
-          defaultChecked="true"
+          defaultChecked
           name="amount"
         />
         0.10
@@ -99,7 +113,7 @@ export function Donate() {
   return (
     <PayPalScriptProvider
       options={{
-        "client-id": process.env.NEXT_PUBLIC_PP_CLIENT_ID,
+        clientId: process.env.NEXT_PUBLIC_PP_CLIENT_ID ?? "",
         components: "buttons",
         currency: "EUR",
       }}

@@ -1,23 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ChangeEvent } from "react";
 import { useAtomValue } from "jotai";
 import Metalness from "./MetallicRoughness/Metalness";
 import Roughness from "./MetallicRoughness/Roughness";
 import TextureSelector from "../components/TextureSelector";
 import { materialIndexAtom } from "../store/model";
+import type { ModelViewerElement, ModelViewerTexture } from "../types/model-viewer";
 
 function MetallicRoughness() {
-  const [initialTexture, setInitialTexture] = useState();
-  const [actualTexture, setActualTexture] = useState();
+  const [initialTexture, setInitialTexture] = useState<ModelViewerTexture | null>(null);
+  const [actualTexture, setActualTexture] = useState<string>();
 
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
   const materialIndex = useAtomValue(materialIndexAtom);
 
   const material = modelViewer.model.materials[materialIndex];
 
-  async function fileHandler(e) {
-    const newTexture = e.target.files[0];
+  async function fileHandler(e: ChangeEvent<HTMLInputElement>) {
+    const newTexture = e.target.files![0];
     const imgTexture = URL.createObjectURL(newTexture);
     setActualTexture(imgTexture);
     const texture = await modelViewer.createTexture(imgTexture);

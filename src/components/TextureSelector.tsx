@@ -1,4 +1,13 @@
+import type { ChangeEvent } from "react";
 import SvgBack from "./SvgBack";
+
+interface TextureSelectorProps {
+  id: string;
+  title: string;
+  fileHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+  revertTexture: () => void;
+  actualTexture?: string;
+}
 
 function TextureSelector({
   id,
@@ -6,9 +15,9 @@ function TextureSelector({
   fileHandler,
   revertTexture,
   actualTexture,
-}) {
+}: TextureSelectorProps) {
   function toggleInput() {
-    document.getElementById(id).click();
+    document.getElementById(id)!.click();
   }
 
   return (

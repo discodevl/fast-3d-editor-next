@@ -1,7 +1,9 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { useSetAtom } from "jotai";
 import { materialIndexAtom } from "../store/model";
+import type { ModelViewerElement } from "../types/model-viewer";
 import BaseColor from "./BaseColor";
 import Emissive from "./Emissive";
 import MetallicRoughness from "./MetallicRoughness";
@@ -11,12 +13,12 @@ import Occlusion from "./Occlusion";
 function TextureSelector() {
   const setMaterialIndex = useSetAtom(materialIndexAtom);
 
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
 
   const { materials } = modelViewer.model;
 
-  function materialHandler(e) {
-    setMaterialIndex(e.target.value);
+  function materialHandler(e: ChangeEvent<HTMLSelectElement>) {
+    setMaterialIndex(Number(e.target.value));
   }
 
   return (

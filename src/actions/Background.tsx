@@ -7,7 +7,7 @@ import { backgroundColorAtom } from "../store/config";
 function Background() {
   const setBackgroundColor = useSetAtom(backgroundColorAtom);
 
-  function colorHandler(color) {
+  function colorHandler(color: string) {
     setBackgroundColor(color);
   }
 

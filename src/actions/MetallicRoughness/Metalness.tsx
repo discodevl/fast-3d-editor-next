@@ -5,23 +5,25 @@ import { useAtomValue } from "jotai";
 import SvgBack from "../../components/SvgBack";
 import Slider from "../../components/Slider";
 import { materialIndexAtom } from "../../store/model";
+import type { ModelViewerElement } from "../../types/model-viewer";
 
 function Metalness() {
   const materialIndex = useAtomValue(materialIndexAtom);
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
   const materialSelected = modelViewer.model.materials[materialIndex];
 
-  const [metalValue, setMetalValue] = useState();
+  const [metalValue, setMetalValue] = useState<number>(0);
 
-  const [defaultValue, setDefaultValue] = useState([]);
+  const [defaultValue, setDefaultValue] = useState<number[]>([]);
 
-  function metalnessHandler(value) {
+  function metalnessHandler(value: number) {
     materialSelected.pbrMetallicRoughness.setMetallicFactor(value);
     setMetalValue(value);
   }
 
   function revertValue() {
-    document.getElementById("range-metal").value = defaultValue[materialIndex];
+    (document.getElementById("range-metal") as HTMLInputElement).value =
+      String(defaultValue[materialIndex]);
     materialSelected.pbrMetallicRoughness.setMetallicFactor(
       defaultValue[materialIndex],
     );
@@ -29,7 +31,7 @@ function Metalness() {
   }
 
   useEffect(() => {
-    const listDefault = [];
+    const listDefault: number[] = [];
     listDefault[materialIndex] =
       materialSelected.pbrMetallicRoughness.metallicFactor;
     setDefaultValue([...listDefault]);
@@ -39,8 +41,8 @@ function Metalness() {
 
   useEffect(() => {
     const listDefault = [...defaultValue];
-    document.getElementById("range-metal").value =
-      materialSelected.pbrMetallicRoughness.metallicFactor;
+    (document.getElementById("range-metal") as HTMLInputElement).value =
+      String(materialSelected.pbrMetallicRoughness.metallicFactor);
     if (!defaultValue[materialIndex]) {
       listDefault[materialIndex] =
         materialSelected.pbrMetallicRoughness.metallicFactor;

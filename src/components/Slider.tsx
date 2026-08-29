@@ -1,9 +1,19 @@
-function formatValue(value, step) {
+function formatValue(value: number, step: number) {
   const decimals = (String(step).split(".")[1] || "").length;
   return Number(value).toFixed(decimals);
 }
 
-function Slider({ id, title, onChange, value, min, max, step }) {
+interface SliderProps {
+  id?: string;
+  title: string;
+  onChange: (value: number) => void;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+}
+
+function Slider({ id, title, onChange, value, min, max, step }: SliderProps) {
   return (
     <div className="flex flex-col mb-5">
       <div className="flex items-center justify-between mb-2.5">

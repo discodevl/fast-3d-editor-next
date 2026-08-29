@@ -5,24 +5,25 @@ import { useAtomValue } from "jotai";
 import SvgBack from "../../components/SvgBack";
 import Slider from "../../components/Slider";
 import { materialIndexAtom } from "../../store/model";
+import type { ModelViewerElement } from "../../types/model-viewer";
 
 function Roughness() {
   const materialIndex = useAtomValue(materialIndexAtom);
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
   const materialSelected = modelViewer.model.materials[materialIndex];
 
-  const [roughnessValue, setRoughnessValue] = useState();
+  const [roughnessValue, setRoughnessValue] = useState<number>(0);
 
-  const [defaultValue, setDefaultValue] = useState([]);
+  const [defaultValue, setDefaultValue] = useState<number[]>([]);
 
-  function roughnessHandler(value) {
+  function roughnessHandler(value: number) {
     materialSelected.pbrMetallicRoughness.setRoughnessFactor(value);
     setRoughnessValue(value);
   }
 
   function revertValue() {
-    document.getElementById("range-roughness").value =
-      defaultValue[materialIndex];
+    (document.getElementById("range-roughness") as HTMLInputElement).value =
+      String(defaultValue[materialIndex]);
     materialSelected.pbrMetallicRoughness.setRoughnessFactor(
       defaultValue[materialIndex],
     );
@@ -30,7 +31,7 @@ function Roughness() {
   }
 
   useEffect(() => {
-    const listDefault = [];
+    const listDefault: number[] = [];
     listDefault[materialIndex] =
       materialSelected.pbrMetallicRoughness.roughnessFactor;
     setDefaultValue([...listDefault]);
@@ -40,8 +41,8 @@ function Roughness() {
 
   useEffect(() => {
     const listDefault = [...defaultValue];
-    document.getElementById("range-roughness").value =
-      materialSelected.pbrMetallicRoughness.roughnessFactor;
+    (document.getElementById("range-roughness") as HTMLInputElement).value =
+      String(materialSelected.pbrMetallicRoughness.roughnessFactor);
     if (!defaultValue[materialIndex]) {
       listDefault[materialIndex] =
         materialSelected.pbrMetallicRoughness.roughnessFactor;

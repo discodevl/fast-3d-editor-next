@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -24,9 +25,9 @@ export const viewport = {
   themeColor: "#000000",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={ibmPlexMono.variable}>
+    <html lang="en" className={ibmPlexMono.variable} suppressHydrationWarning>
       <body className="font-[family-name:var(--font-ibm-plex-mono)] text-white m-0">
         {children}
         <Script

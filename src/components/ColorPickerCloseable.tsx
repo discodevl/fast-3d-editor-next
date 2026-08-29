@@ -4,23 +4,36 @@ import { useEffect, useRef, useState } from "react";
 import ColorPicker from "./ColorPicker";
 import IcoColor from "./IcoColor";
 
-function ColorPickerCloseable({ title, onSelectColor, revertColor }) {
+interface ColorPickerCloseableProps {
+  title: string;
+  onSelectColor: (color: string) => void;
+  revertColor: () => void;
+}
+
+function ColorPickerCloseable({
+  title,
+  onSelectColor,
+  revertColor,
+}: ColorPickerCloseableProps) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   function toggleHandler() {
     setOpen((open) => !open);
   }
 
-  function colorHandler(color) {
+  function colorHandler(color: string) {
     onSelectColor(color);
   }
 
   useEffect(() => {
     if (!open) return;
 
-    function handleClickOutside(e) {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     }

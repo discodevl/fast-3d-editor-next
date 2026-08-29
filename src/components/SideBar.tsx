@@ -4,7 +4,11 @@ import TextureSelector from "../actions/TextureSelector";
 import Export from "../actions/Export";
 import Doc from "../actions/Doc";
 
-function SideBar({ tab }) {
+interface SideBarProps {
+  tab: number;
+}
+
+function SideBar({ tab }: SideBarProps) {
   return (
     <div className="flex flex-col w-[21%] h-full bg-sidebar overflow-y-auto">
       <div className="m-2">

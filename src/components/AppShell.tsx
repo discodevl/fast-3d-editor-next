@@ -9,13 +9,13 @@ import SideBar from "./SideBar";
 function App() {
   const [tab, setTab] = useState(0);
 
-  function tabHandler(tab) {
+  function tabHandler(tab: number) {
     setTab(tab);
   }
 
   return (
     <div className="flex w-screen h-screen">
-      <MainSideBar onChangeTab={tabHandler} />
+      <MainSideBar onChangeTab={tabHandler} tab={tab} />
       <SideBar tab={tab} />
       <ModelViewer />
     </div>

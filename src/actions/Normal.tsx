@@ -1,27 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import { useAtomValue } from "jotai";
 import TextureSelector from "../components/TextureSelector";
 import { materialIndexAtom } from "../store/model";
+import type { ModelViewerElement, ModelViewerTexture } from "../types/model-viewer";
 
-function Occlusion() {
-  const modelViewer = document.querySelector("model-viewer");
+function Normal() {
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
   const materialIndex = useAtomValue(materialIndexAtom);
 
-  const [initialTexture, setInitialTexture] = useState();
-  const [actualTexture, setActualTexture] = useState();
+  const [initialTexture, setInitialTexture] = useState<ModelViewerTexture | null>(null);
+  const [actualTexture, setActualTexture] = useState<string>();
 
   const material = modelViewer.model.materials[materialIndex];
 
-  async function fileHandler(e) {
+  async function fileHandler(e: ChangeEvent<HTMLInputElement>) {
     const material = modelViewer.model.materials[materialIndex];
 
-    const newTexture = e.target.files[0];
+    const newTexture = e.target.files![0];
     const imgTexture = URL.createObjectURL(newTexture);
     setActualTexture(imgTexture);
     const texture = await modelViewer.createTexture(imgTexture);
-    material.occlusionTexture.setTexture(texture);
+    material.normalTexture.setTexture(texture);
   }
 
   async function revertTexture() {
@@ -29,17 +31,17 @@ function Occlusion() {
     setActualTexture(thumb);
     const material = modelViewer.model.materials[materialIndex];
 
-    material.occlusionTexture.setTexture(initialTexture);
+    material.normalTexture.setTexture(initialTexture);
   }
 
   useEffect(() => {
     async function getThumb() {
       const thumb =
-        await material?.occlusionTexture?.texture?.source?.createThumbnail(
+        await material?.normalTexture?.texture?.source?.createThumbnail(
           48,
           48,
         );
-      setInitialTexture(material.occlusionTexture.texture);
+      setInitialTexture(material.normalTexture.texture);
       setActualTexture(thumb);
     }
     getThumb();
@@ -53,8 +55,8 @@ function Occlusion() {
       </div>
 
       <TextureSelector
-        id="t4"
-        title="Occlusion Texture"
+        id="t5"
+        title="Normal Texture"
         fileHandler={fileHandler}
         revertTexture={revertTexture}
         actualTexture={actualTexture}
@@ -63,4 +65,4 @@ function Occlusion() {
   );
 }
 
-export default Occlusion;
+export default Normal;

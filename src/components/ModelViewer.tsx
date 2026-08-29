@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { ChangeEvent, MouseEvent } from "react";
 import { useAtom } from "jotai";
 import { Tooltip } from "react-tooltip";
 import {
@@ -12,7 +13,7 @@ import {
 import { backgroundColorAtom } from "../store/config";
 
 function ModelViewer() {
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [exposure] = useAtom(exposureAtom);
   const [shadowIntensity] = useAtom(shadowIntensityAtom);
@@ -21,8 +22,8 @@ function ModelViewer() {
 
   const [bgColor] = useAtom(backgroundColorAtom);
 
-  function handleFile(e) {
-    const modelUpload = e.target.files[0];
+  function handleFile(e: ChangeEvent<HTMLInputElement>) {
+    const modelUpload = e.target.files![0];
     const src = URL.createObjectURL(modelUpload);
     setSrc(src);
   }
@@ -31,13 +32,16 @@ function ModelViewer() {
     setSrc("/Astronaut.glb");
   }, [setSrc]);
 
-  function handleBtnUpload(e) {
+  function handleBtnUpload(e: MouseEvent<HTMLDivElement>) {
     e.preventDefault();
-    inputRef.current.click();
+    inputRef.current!.click();
   }
 
   return (
-    <>
+    <div
+      className="relative flex flex-1 min-w-0 justify-center items-center"
+      style={{ backgroundColor: bgColor }}
+    >
       <input
         ref={inputRef}
         type="file"
@@ -46,7 +50,7 @@ function ModelViewer() {
         style={{ display: "none" }}
       />
       <div
-        className="fixed z-10 right-2.5 top-2.5 cursor-pointer"
+        className="absolute z-10 right-2.5 top-2.5 cursor-pointer"
         data-tooltip-id="glb_tooltip"
         data-tooltip-content="Upload you own .glb file"
         onClick={handleBtnUpload}
@@ -63,22 +67,17 @@ function ModelViewer() {
         </svg>
       </div>
       <Tooltip id="glb_tooltip" />
-      <div
-        className="flex justify-center items-center w-[75%]"
-        style={{ backgroundColor: bgColor }}
-      >
-        <model-viewer
-          id="mv"
-          className="h-full w-full"
-          alt="model viewer with fast 3d editor"
-          src={src}
-          camera-controls
-          exposure={exposure}
-          shadow-intensity={shadowIntensity}
-          shadow-softness={shadowSoftness}
-        ></model-viewer>
-      </div>
-    </>
+      <model-viewer
+        id="mv"
+        className="h-full w-full"
+        alt="model viewer with fast 3d editor"
+        src={src}
+        camera-controls
+        exposure={exposure}
+        shadow-intensity={shadowIntensity}
+        shadow-softness={shadowSoftness}
+      ></model-viewer>
+    </div>
   );
 }
 

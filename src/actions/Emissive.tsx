@@ -1,42 +1,44 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import { useAtomValue } from "jotai";
 import ColorPickerCloseable from "../components/ColorPickerCloseable";
 import TextureSelector from "../components/TextureSelector";
 import { materialIndexAtom } from "../store/model";
+import type { ModelViewerElement, ModelViewerTexture } from "../types/model-viewer";
 
 function Emissive() {
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
   const materialIndex = useAtomValue(materialIndexAtom);
 
-  const [color, setColor] = useState();
-  const [defaultColor, setDefaultColor] = useState();
-  const [initialTexture, setInitialTexture] = useState();
-  const [actualTexture, setActualTexture] = useState();
+  const [color, setColor] = useState<string>();
+  const [defaultColor, setDefaultColor] = useState<number[]>();
+  const [initialTexture, setInitialTexture] = useState<ModelViewerTexture | null>(null);
+  const [actualTexture, setActualTexture] = useState<string>();
 
   const material = modelViewer.model.materials[materialIndex];
 
-  async function fileHandler(e) {
+  async function fileHandler(e: ChangeEvent<HTMLInputElement>) {
     const material = modelViewer.model.materials[materialIndex];
 
-    const newTexture = e.target.files[0];
+    const newTexture = e.target.files![0];
     const imgTexture = URL.createObjectURL(newTexture);
     setActualTexture(imgTexture);
     const texture = await modelViewer.createTexture(imgTexture);
     material.emissiveTexture.setTexture(texture);
   }
 
-  function getColor(color) {
+  function getColor(color: string) {
     setColor(color);
     colorHandler(color);
   }
 
-  function colorHandler(color) {
+  function colorHandler(color: string) {
     const material = modelViewer.model.materials[materialIndex];
     setColor(color);
 
-    const rgb = hexToRgb(color);
+    const rgb = hexToRgb(color) as string;
     const rgbArr = rgb
       .split(",")
       .map((numberString) => parseFloat(numberString));
@@ -48,12 +50,12 @@ function Emissive() {
   function restoreColor() {
     const material = modelViewer.model.materials[materialIndex];
     const defaultColorHex = rgbToHex(
-      defaultColor[0],
-      defaultColor[2],
-      defaultColor[1],
+      defaultColor![0],
+      defaultColor![2],
+      defaultColor![1],
     );
     setColor(defaultColorHex);
-    material.setEmissiveFactor(defaultColor);
+    material.setEmissiveFactor(defaultColor!);
   }
 
   async function revertTexture() {
@@ -88,18 +90,18 @@ function Emissive() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materialIndex]);
 
-  function rgbToHex(r, g, b) {
+  function rgbToHex(r: number, g: number, b: number) {
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
   }
 
-  function hexToRgb(hex) {
+  function hexToRgb(hex: string) {
     let c;
     if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-      c = hex.substring(1).split("");
-      if (c.length === 3) {
-        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      let split = hex.substring(1).split("");
+      if (split.length === 3) {
+        split = [split[0], split[0], split[1], split[1], split[2], split[2]];
       }
-      c = "0x" + c.join("");
+      c = Number("0x" + split.join(""));
       return `${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",")},1`;
     }
   }

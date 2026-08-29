@@ -32,7 +32,12 @@ const COLORS_TERTIARY = [
   "#CC6600",
 ];
 
-function ColorPicker({ title, onSelectColor }) {
+interface ColorPickerProps {
+  title?: string;
+  onSelectColor: (color: string) => void;
+}
+
+function ColorPicker({ title, onSelectColor }: ColorPickerProps) {
   const [toggleColorPicker, setToggleColorPicker] = useState(false);
   const [color, setColor] = useState("");
 
@@ -40,7 +45,7 @@ function ColorPicker({ title, onSelectColor }) {
     setToggleColorPicker((toggle) => !toggle);
   }
 
-  function selectColor(color) {
+  function selectColor(color: string) {
     onSelectColor(color);
     setColor(color);
   }
