@@ -8,6 +8,8 @@ import ColorPickerCloseable from "../components/ColorPickerCloseable";
 import { materialIndexAtom } from "../store/model";
 import type { ModelViewerElement, ModelViewerTexture } from "../types/model-viewer";
 
+
+
 function BaseColor() {
   const modelViewer = document.querySelector<ModelViewerElement>("model-viewer")!;
 
@@ -32,6 +34,22 @@ function BaseColor() {
   function getColor(color: string) {
     setColor(color);
     colorHandler(color);
+  }
+
+   function rgbToHex(r: number, g: number, b: number) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function hexToRgb(hex: string) {
+    let c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      let split = hex.substring(1).split("");
+      if (split.length === 3) {
+        split = [split[0], split[0], split[1], split[1], split[2], split[2]];
+      }
+      c = Number("0x" + split.join(""));
+      return `${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",")},1`;
+    }
   }
 
   function colorHandler(color: string) {
@@ -101,25 +119,11 @@ function BaseColor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materialIndex]);
 
-  function rgbToHex(r: number, g: number, b: number) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  }
-
-  function hexToRgb(hex: string) {
-    let c;
-    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-      let split = hex.substring(1).split("");
-      if (split.length === 3) {
-        split = [split[0], split[0], split[1], split[1], split[2], split[2]];
-      }
-      c = Number("0x" + split.join(""));
-      return `${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",")},1`;
-    }
-  }
+ 
 
   return (
     <div className="flex flex-col justify-between">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4">
         <span>Base Color Texture</span>
         <ColorPickerCloseable
           title="Base Color Factor"
