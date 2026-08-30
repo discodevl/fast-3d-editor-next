@@ -16,7 +16,7 @@ function SideBar({ tab }: SideBarProps) {
   const modelLoaded = useAtomValue(modelLoadedAtom);
 
   return (
-    <div className="flex flex-col w-[21%] h-full bg-sidebar overflow-y-auto">
+    <div className="flex flex-col shrink-0 order-2 w-full md:w-[21%] max-h-[45vh] md:max-h-none h-auto md:h-full bg-sidebar overflow-y-auto">
       <div className="m-2 h-full">
         {tab === 0 && <Doc />}
         {tab === 1 && <Luminosity />}

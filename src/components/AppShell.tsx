@@ -10,7 +10,7 @@ interface AppShellProps {
 export default function AppShell({ tab }: AppShellProps) {
   return (
     <Provider>
-      <div className="flex w-screen h-screen">
+      <div className="flex flex-col md:flex-row w-screen h-screen">
         <MainSideBar tab={tab} />
         <SideBar tab={tab} />
         <ModelViewer />

@@ -36,14 +36,14 @@ function MainSideBar({ tab, block }: MainSideBarProps) {
   }
 
   return (
-    <nav className="flex flex-col items-center w-16 h-screen bg-navbar py-4">
-      <ul className="list-none p-0 m-0 flex flex-col items-center gap-1 w-full">
+    <nav className="flex flex-row md:flex-col items-center shrink-0 w-full md:w-16 h-16 md:h-screen bg-navbar px-2 md:px-0 py-0 md:py-4 order-3 md:order-1">
+      <ul className="list-none p-0 m-0 flex flex-row md:flex-col items-center justify-center md:justify-start gap-1 flex-1 md:w-full">
         {items.map(({ tab: itemTab, icon: Icon }) => {
           const active = tab === itemTab;
           return (
-            <li key={itemTab} className="relative w-full flex justify-center">
+            <li key={itemTab} className="relative flex justify-center md:w-full">
               {active && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-accent" />
+                <span className="absolute left-1/2 -translate-x-1/2 top-0 w-6 h-1 rounded-b-full md:left-0 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:w-1 md:h-6 md:rounded-r-full md:rounded-b-none bg-accent" />
               )}
               <button
                 type="button"
@@ -61,7 +61,7 @@ function MainSideBar({ tab, block }: MainSideBarProps) {
           );
         })}
       </ul>
-      <div className="mt-auto">
+      <div className="ml-auto md:ml-0 md:mt-auto">
         <button
           type="button"
           onClick={() => toggleSideBar(0)}

@@ -57,7 +57,7 @@ function ModelViewer() {
 
   return (
     <div
-      className="relative flex flex-1 min-w-0 justify-center items-center"
+      className="relative flex flex-1 min-w-0 min-h-0 order-1 md:order-3 justify-center items-center"
       style={{ backgroundColor: bgColor }}
     >
       <input
