@@ -51,7 +51,7 @@ function Normal() {
   return (
     <div className="flex flex-col justify-between">
       <div className="flex items-center justify-between">
-        <span>Occlusion Texture</span>
+        <span>Normal Texture</span>
       </div>
 
       <TextureSelector

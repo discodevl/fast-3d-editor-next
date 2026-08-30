@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import ColorPicker from "./ColorPicker";
 import IcoColor from "./IcoColor";
@@ -17,7 +18,9 @@ function ColorPickerCloseable({
   revertColor,
 }: ColorPickerCloseableProps) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState<{ top: number; left: number }>();
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   function toggleHandler() {
     setOpen((open) => !open);
@@ -28,15 +31,23 @@ function ColorPickerCloseable({
   }
 
   useEffect(() => {
+    if (!open || !triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    setPosition({ top: rect.bottom + 8, left: rect.right });
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
 
     function handleClickOutside(e: MouseEvent) {
+      const target = e.target as Node;
       if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
+        triggerRef.current?.contains(target) ||
+        popupRef.current?.contains(target)
       ) {
-        setOpen(false);
+        return;
       }
+      setOpen(false);
     }
 
     function handleEscape(e: KeyboardEvent) {
@@ -52,26 +63,33 @@ function ColorPickerCloseable({
   }, [open]);
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative" ref={triggerRef}>
       <div onClick={toggleHandler} className="cursor-pointer">
         <IcoColor />
       </div>
-      {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 rounded-lg border border-app-border bg-surface p-3 shadow-xl">
-          <div className="mb-3 flex items-center justify-between gap-4">
-            <span className="text-sm font-bold">{title}</span>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Close"
-              className="cursor-pointer text-muted hover:text-white"
-            >
-              <X size={16} />
-            </button>
-          </div>
-          <ColorPicker onSelectColor={colorHandler} />
-        </div>
-      )}
+      {open &&
+        position &&
+        createPortal(
+          <div
+            ref={popupRef}
+            style={{ top: position.top, left: position.left, transform: "translateX(-100%)" }}
+            className="fixed z-1000 w-max rounded-lg border border-app-border bg-surface p-3 shadow-xl"
+          >
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <span className="text-sm font-bold">{title}</span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="cursor-pointer text-muted hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <ColorPicker onSelectColor={colorHandler} />
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
