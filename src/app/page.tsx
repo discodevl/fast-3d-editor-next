@@ -1,4 +1,4 @@
-import AppShell from "@/components/AppShell";
+import AppShellLoader from "@/components/AppShellLoader";
 
 export default async function Home({
   searchParams,
@@ -9,5 +9,5 @@ export default async function Home({
   const parsedTab = Number(tab);
   const activeTab = Number.isInteger(parsedTab) && parsedTab >= 0 ? parsedTab : 0;
 
-  return <AppShell tab={activeTab} />;
+  return <AppShellLoader tab={activeTab} />;
 }

@@ -2,23 +2,27 @@
 
 import { useEffect, useRef } from "react";
 import type { ChangeEvent, MouseEvent } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { Tooltip } from "react-tooltip";
 import {
   srcAtom,
+  modelLoadedAtom,
   exposureAtom,
   shadowIntensityAtom,
   shadowSoftnessAtom,
 } from "../store/model";
 import { backgroundColorAtom } from "../store/config";
+import type { ModelViewerElement } from "../types/model-viewer";
 
 function ModelViewer() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const modelViewerRef = useRef<ModelViewerElement>(null);
 
   const [exposure] = useAtom(exposureAtom);
   const [shadowIntensity] = useAtom(shadowIntensityAtom);
   const [shadowSoftness] = useAtom(shadowSoftnessAtom);
   const [src, setSrc] = useAtom(srcAtom);
+  const setModelLoaded = useSetAtom(modelLoadedAtom);
 
   const [bgColor] = useAtom(backgroundColorAtom);
 
@@ -31,6 +35,20 @@ function ModelViewer() {
   useEffect(() => {
     setSrc("/Astronaut.glb");
   }, [setSrc]);
+
+  // The model-viewer element only has usable `.model` data once it fires
+  // "load" for the current src, so gate consumers on that instead of
+  // assuming it's ready as soon as the element mounts.
+  useEffect(() => {
+    setModelLoaded(false);
+    const el = modelViewerRef.current;
+    if (!el) return;
+    function handleLoad() {
+      setModelLoaded(true);
+    }
+    el.addEventListener("load", handleLoad);
+    return () => el.removeEventListener("load", handleLoad);
+  }, [src, setModelLoaded]);
 
   function handleBtnUpload(e: MouseEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -68,6 +86,7 @@ function ModelViewer() {
       </div>
       <Tooltip id="glb_tooltip" />
       <model-viewer
+        ref={modelViewerRef}
         id="mv"
         className="h-full w-full"
         alt="model viewer with fast 3d editor"
