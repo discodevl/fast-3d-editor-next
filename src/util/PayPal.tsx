@@ -87,8 +87,8 @@ function AmountPicker({ onAmountChange }: AmountPickerProps) {
     <fieldset onChange={onAmountChange}>
       <legend>Donation Amount:</legend>
       <div className="flex items-center justify-around">
-        {amounts.map(amount => <label key={amount}>
-          <input type="radio" value={amount} name="amount"/>
+        {amounts.map((amount) => <label key={amount}>
+          <input type="radio" defaultChecked={amount === 1.00}value={amount} name="amount"/>
           {amount}€
         </label>)}
       </div>
