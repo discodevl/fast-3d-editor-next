@@ -12,6 +12,9 @@ interface ColorPickerCloseableProps {
   revertColor: () => void;
 }
 
+// Keep in sync with Tailwind's default `md` breakpoint used across the app.
+const MOBILE_QUERY = "(max-width: 767px)";
+
 function ColorPickerCloseable({
   title,
   onSelectColor,
@@ -19,6 +22,7 @@ function ColorPickerCloseable({
 }: ColorPickerCloseableProps) {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<{ top: number; left: number }>();
+  const [isMobile, setIsMobile] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -31,10 +35,22 @@ function ColorPickerCloseable({
   }
 
   useEffect(() => {
-    if (!open || !triggerRef.current) return;
+    const mql = window.matchMedia(MOBILE_QUERY);
+    setIsMobile(mql.matches);
+    function handleChange(e: MediaQueryListEvent) {
+      setIsMobile(e.matches);
+    }
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
+  }, []);
+
+  // On mobile the picker renders as a centered modal, so it doesn't need to
+  // be anchored to the trigger icon's position.
+  useEffect(() => {
+    if (!open || isMobile || !triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
     setPosition({ top: rect.bottom + 8, left: rect.right });
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open) return;
@@ -62,32 +78,54 @@ function ColorPickerCloseable({
     };
   }, [open]);
 
+  const panel = (
+    <div
+      ref={popupRef}
+      style={
+        isMobile
+          ? undefined
+          : {
+              top: position?.top,
+              left: position?.left,
+              transform: "translateX(-100%)",
+            }
+      }
+      className={
+        isMobile
+          ? "w-full max-w-sm rounded-lg border border-app-border bg-surface p-4"
+          : "fixed z-1000 w-max rounded-lg border border-app-border bg-surface p-3 shadow-xl"
+      }
+    >
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <span className="text-sm font-bold">{title}</span>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          aria-label="Close"
+          className="cursor-pointer text-muted hover:text-white"
+        >
+          <X size={16} />
+        </button>
+      </div>
+      <ColorPicker onSelectColor={colorHandler} />
+    </div>
+  );
+
   return (
     <div className="relative" ref={triggerRef}>
       <div onClick={toggleHandler} className="cursor-pointer">
         <IcoColor />
       </div>
       {open &&
-        position &&
+        (isMobile || position) &&
         createPortal(
-          <div
-            ref={popupRef}
-            style={{ top: position.top, left: position.left, transform: "translateX(-100%)" }}
-            className="fixed z-1000 w-max rounded-lg border border-app-border bg-surface p-3 shadow-xl"
-          >
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <span className="text-sm font-bold">{title}</span>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                className="cursor-pointer text-muted hover:text-white"
-              >
-                <X size={16} />
-              </button>
+          isMobile ? (
+            <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/60 p-4">
+              {panel}
             </div>
-            <ColorPicker onSelectColor={colorHandler} />
-          </div>,
+          ) : (
+            panel
+          ),
           document.body,
         )}
     </div>
