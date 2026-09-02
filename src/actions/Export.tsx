@@ -29,7 +29,7 @@ function Export() {
     <div className="flex flex-col items-center gap-4 mt-6.25">
       {/* <button className="mb-5 p-2 rounded-lg text-white w-full bg-surface border border-app-border cursor-pointer hover:opacity-50" onClick={discardHandler}>Discard Model</button> */}
       <h2 className="font-bold">Export your glb model</h2>
-      <p>Download you modified model, leaving the page without exporting your model will result the loss of your modifications</p>
+      <p>Download your modified model, leaving the page without exporting your model will result in the loss of your modifications</p>
       <button
         className="mb-5 p-2 rounded-lg text-white w-full bg-surface border border-app-border cursor-pointer hover:opacity-50"
         onClick={saveHandler}

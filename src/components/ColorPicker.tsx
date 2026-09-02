@@ -91,7 +91,7 @@ function ColorPicker({ title, onSelectColor }: ColorPickerProps) {
           Custom color
         </button>
         {toggleColorPicker ? (
-          <div>
+          <div className="mt-2">
             <HexColorPicker color={color} onChange={(color) => selectColor(color)} />
             #
             <HexColorInput

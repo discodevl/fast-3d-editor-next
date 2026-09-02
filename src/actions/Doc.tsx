@@ -5,23 +5,22 @@ function Doc() {
   return (
     <div className="flex flex-col justify-between items-center h-full">
       <div>
-        <h3>Welcome to fast 3d editor :)</h3>
+        <h3>Welcome to Fast 3D Editor :)</h3>
         <p>
-          First upload a &apos;.glb&apos; file to start editing, if you dont
-          have a &apos;.glb&apos; file you can click start to edit a demo.
+          Upload a &apos;.glb&apos; file to start editing — if you don&apos;t
+          have one, a demo model loads automatically so you can try it out.
         </p>
         <p>
-          Once you uploaded a model, the icons in the menu should be available.
-          In the first icon theres the luminosity options, in the next icon you
-          will find a selector with all the materials of the model and the
-          texture settings, the changes will be applied to the selected
-          material. The third option is for changing the background color (wont
-          be saved), and then the save icon when you can save your modified
-          model or discard the current model.
+          Once your model is loaded, the icons in the menu become available:
+          the first icon has the lighting options; the next opens a material
+          selector with all the model&apos;s textures, applied to whichever
+          material is selected; the third lets you change the background
+          color (not saved); and the last lets you export your modified
+          model.
         </p>
         <span>
-          Did you enjoy fast 3d editor? Consider donate a small amount to help
-          the project:{" "}
+          Did you enjoy Fast 3D Editor? Consider donating a small amount to
+          help the project:{" "}
         </span>
         <Donate />
       </div>

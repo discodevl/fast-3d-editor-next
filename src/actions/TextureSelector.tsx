@@ -22,9 +22,9 @@ function TextureSelector() {
   }
 
   return (
-    <div className="flex flex-col ml-2 mt-[15px]">
-      <div className="flex justify-center mb-[15px]">
-        <span className="font-bold mb-[15px]">Textures</span>
+    <div className="flex flex-col md:mt-4 mt-2">
+      <div className="flex justify-center md:mb-4 mb-2">
+        <span className="font-bold md:mb-4 mb-2">Textures</span>
       </div>
       <span className="text-center mb-2">Select material</span>
       <select

@@ -15,7 +15,10 @@ function Background() {
     <div className="flex flex-col items-center justify-center gap-4">
       <h2 className="font-bold">Change background color</h2>
       <p>The background color is visualization only, it wont affect your model</p>
+      <div className="">
+
       <ColorPicker title="Background Color" onSelectColor={colorHandler} />
+      </div>
     </div>
   );
 }

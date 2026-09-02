@@ -14,14 +14,44 @@ function Luminosity() {
   const [shadowSoftness, setShadowSoftness] = useAtom(shadowSoftnessAtom);
 
   return (
-    <div className="flex flex-col ml-2 mt-2">
+    <div className="flex flex-col ml-2 mt-2 gap-4">
       <div className="flex justify-center mb-[15px]">
         <span className="font-bold">Lightining</span>
       </div>
-      <Slider title="Exposure" min={0} max={2} step={0.1} value={exposure} onChange={setExposure} />
+      <div className="flex flex-col gap-1">
+        <Slider
+          title="Exposure"
+          min={0}
+          max={2}
+          step={0.1}
+          value={exposure}
+          onChange={setExposure}
+        />
+        <p className="text-[10px]">Controls the exposure of the model</p>
+      </div>
       {/* SHADOW */}
-      <Slider title="Shadow Intensity" min={0} max={1} step={0.1} value={shadowIntensity} onChange={setShadowIntensity} />
-      <Slider title="Shadow Softness" min={0} max={1} step={0.1} value={shadowSoftness} onChange={setShadowSoftness} />
+      <div>
+        <Slider
+          title="Shadow Intensity"
+          min={0}
+          max={1}
+          step={0.1}
+          value={shadowIntensity}
+          onChange={setShadowIntensity}
+        />
+        <p className="text-[10px]">Controls the opacity of the shadow</p>
+      </div>
+      <div>
+        <Slider
+          title="Shadow Softness"
+          min={0}
+          max={1}
+          step={0.1}
+          value={shadowSoftness}
+          onChange={setShadowSoftness}
+        />
+        <p className="text-[10px]">Controls the blurriness of the shadow</p>
+      </div>
     </div>
   );
 }
