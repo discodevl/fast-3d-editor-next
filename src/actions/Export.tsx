@@ -27,7 +27,6 @@ function Export() {
 
   return (
     <div className="flex flex-col items-center gap-2 md:mt-6.25 mt-3">
-      {/* <button className="mb-5 p-2 rounded-lg text-white w-full bg-surface border border-app-border cursor-pointer hover:opacity-50" onClick={discardHandler}>Discard Model</button> */}
       <h2 className="font-bold">Download your model</h2>
       <button
         className="p-2 rounded-lg text-white w-full bg-surface border border-app-border cursor-pointer hover:opacity-50"
