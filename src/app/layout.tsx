@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: title,
-    template: "%s | Fast 3D Editor",
+    template: "%s | Glb Editor",
   },
   description,
   keywords: [
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     "browser 3D tool",
     "free 3D editor"
   ],
-  applicationName: "Fast 3D Editor",
-  authors: [{ name: "Fast 3D Editor" }],
+  applicationName: "Glb Editor",
+  authors: [{ name: "Glb Editor" }],
   category: "technology",
   alternates: {
     canonical: "/",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "Fast 3D Editor",
+    siteName: "Glb Editor",
     title,
     description,
     images: [
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
         url: "/logo512.png",
         width: 512,
         height: 512,
-        alt: "Fast 3D Editor",
+        alt: "logo Glb Editor",
       },
     ],
     locale: "en_US",
